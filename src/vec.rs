@@ -30,7 +30,7 @@ impl VectorOperations<f64> for Vec2d {
 
     fn normalize(&self) -> Self {
         let len = self.length();
-        self.clone() / len
+        *self / len
     }
 }
 
