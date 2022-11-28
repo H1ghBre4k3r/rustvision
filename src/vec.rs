@@ -21,16 +21,23 @@ pub trait VectorOperations<T> {
 
     /// Normalize this vector (i.e., set its length to 1 but preserve the direction).
     fn normalize(&self) -> Self;
+
+    /// Calculate the dot product of this vectort and another one.
+    fn dot(&self, rhs: &Self) -> T;
 }
 
 impl VectorOperations<f64> for Vec2d {
     fn length(&self) -> f64 {
-        (self.x.powi(2) + self.y.powi(2)).sqrt()
+        (self.dot(self)).sqrt()
     }
 
     fn normalize(&self) -> Self {
         let len = self.length();
         *self / len
+    }
+
+    fn dot(&self, rhs: &Self) -> f64 {
+        self.x * rhs.x + self.y * rhs.y
     }
 }
 
@@ -118,5 +125,26 @@ mod tests {
     #[test]
     fn test_vec_div() {
         assert_eq!(Vec2 { x: 2.0, y: 5.0 } / 2.0, Vec2 { x: 1.0, y: 2.5 });
+    }
+
+    #[test]
+    fn vec2d_test_length() {
+        assert_eq!(Vec2d { x: 3.0, y: 4.0 }.length(), 5.0);
+    }
+
+    #[test]
+    fn vec2d_test_normalize() {
+        assert_eq!(
+            Vec2d { x: 2.0, y: 0.0 }.normalize(),
+            Vec2d { x: 1.0, y: 0.0 }
+        );
+    }
+
+    #[test]
+    fn vec2d_test_dot() {
+        assert_eq!(
+            Vec2d { x: -4.0, y: -9.0 }.dot(&Vec2d { x: -1.0, y: 2.0 }),
+            -14.0
+        );
     }
 }
