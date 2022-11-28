@@ -37,13 +37,13 @@ impl PNM for Color {
 #[macro_export]
 macro_rules! rgb {
     () => {
-        Color::default()
+        $crate::color::Color::default()
     };
     ($val:expr) => {
-        Color::splat($val)
+        $crate::color::Color::splat($val)
     };
     ($r:expr, $g:expr, $b:expr) => {
-        Color::new($r, $g, $b)
+        $crate::color::Color::new($r, $g, $b)
     };
 }
 

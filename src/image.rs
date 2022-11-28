@@ -1,4 +1,4 @@
-use crate::{color::Color, ppm::PNM, vec::Vec2d};
+use crate::{color::Color, ppm::PNM, shapes::Shape, vec::Vec2d};
 
 /// Struct for representing an image.
 pub struct Image {
@@ -55,8 +55,13 @@ impl Image {
     }
 
     /// Fill the entire image with one color.
-    pub fn fill(&mut self, color: &Color) {
+    pub fn fill_with(&mut self, color: &Color) {
         self.pixels = vec![vec![*color; self.cols]; self.rows];
+    }
+
+    /// Draw a given shape to the picture.
+    pub fn draw(&mut self, shape: &dyn Shape) {
+        shape.draw(self);
     }
 }
 
@@ -122,7 +127,7 @@ mod tests {
     #[test]
     fn test_image_fill() {
         let mut img = Image::new(42, 17);
-        img.fill(&rgb!(17, 120, 42));
+        img.fill_with(&rgb!(17, 120, 42));
         assert_eq!(img.pixels, vec![vec![rgb!(17, 120, 42); 42]; 17]);
     }
 }
