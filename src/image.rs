@@ -10,23 +10,23 @@ pub struct Image {
 impl Image {
     /// Create a new image with the specified width and height, where all pixels are filled with
     /// black.
-    fn new(cols: usize, rows: usize) -> Self {
+    pub fn new(cols: usize, rows: usize) -> Self {
         let pixels = vec![vec![Color::default(); rows]; cols];
         Self { cols, rows, pixels }
     }
 
     /// Get the number of columns of this image.
-    fn cols(&self) -> usize {
+    pub fn cols(&self) -> usize {
         self.cols
     }
 
     /// Get the number of rows of this image.
-    fn rows(&self) -> usize {
+    pub fn rows(&self) -> usize {
         self.rows
     }
 
     /// Get the color at the specified index, or None, if the index it out of bounds.
-    fn get(&self, x: usize, y: usize) -> Option<Color> {
+    pub fn get(&self, x: usize, y: usize) -> Option<Color> {
         let Some(column) = self.pixels.get(x) else {
              return None;
         };
@@ -34,7 +34,7 @@ impl Image {
     }
 
     /// Set the color of a pixel at the specified coordinates.
-    fn set(&mut self, x: usize, y: usize, color: &Color) {
+    pub fn set(&mut self, x: usize, y: usize, color: &Color) {
         let Some(column) = self.pixels.get_mut(x) else {
              return;
         };
@@ -46,7 +46,7 @@ impl Image {
     }
 
     /// Fill the entire image with one color.
-    fn fill(&mut self, color: &Color) {
+    pub fn fill(&mut self, color: &Color) {
         self.pixels = vec![vec![*color; self.rows]; self.cols];
     }
 }
