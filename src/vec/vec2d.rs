@@ -20,7 +20,24 @@ impl VectorOperations<f64> for Vec2d {
 
 #[cfg(test)]
 mod tests {
+    use crate::vec2;
+
     use super::*;
+
+    #[test]
+    fn test_vec2d_macro_empty() {
+        assert_eq!(vec2![], Vec2d { x: 0.0, y: 0.0 });
+    }
+
+    #[test]
+    fn test_vec2d_macro_splat() {
+        assert_eq!(vec2![3.0], Vec2d { x: 3.0, y: 3.0 });
+    }
+
+    #[test]
+    fn test_vec2d_macro_double_args() {
+        assert_eq!(vec2![3.0, 4.0], Vec2d { x: 3.0, y: 4.0 });
+    }
 
     #[test]
     fn test_length() {

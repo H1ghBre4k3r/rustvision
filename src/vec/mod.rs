@@ -10,10 +10,59 @@ pub use self::vec2d::*;
 ///
 /// Unless you really know what you are doing, you should probably not use this struct directly.
 /// Rather work with the provided utility types (such as `Vec2d`).
-#[derive(Debug, Eq, PartialEq, Clone, Copy)]
+#[derive(Default, Debug, Eq, PartialEq, Clone, Copy)]
 pub struct Vec2<T> {
     pub x: T,
     pub y: T,
+}
+
+/// Utility macro for creating a vector from the given arguments.
+///
+/// # Examples
+///
+/// You can create default (i.e., "zero length") vectors with this macro:
+///
+/// ```rust
+/// # #[macro_use] extern crate rustvision;
+/// use rustvision::vec::*;
+///
+/// let v = vec2![];
+/// assert_eq!(v, Vec2 { x: 0, y: 0 });
+/// ```
+///
+/// It also supports "prefilling" all fields of a vector with a given value:
+///
+/// ```rust
+/// # #[macro_use] extern crate rustvision;
+/// use rustvision::vec::*;
+///
+/// let v = vec2![42];
+/// assert_eq!(v, Vec2 { x: 42, y: 42 });
+/// ```
+///
+/// Lastly, it supports intuitive vector initialization aswell:
+///
+/// ```rust
+/// # #[macro_use] extern crate rustvision;
+/// use rustvision::vec::*;
+///
+/// let v = vec2![42, 1337];
+/// assert_eq!(v, Vec2 { x: 42, y: 1337 });
+/// ```
+///
+/// This macro is also "type agnostic" in a way, that automatically creates a vector of the fitting
+/// utility type (e.g., `Vec2d`) when called with the right arguments.
+#[macro_export]
+macro_rules! vec2 {
+    () => {
+        Vec2::default()
+    };
+    ($val:expr) => {
+        Vec2 { x: $val, y: $val }
+    };
+    ($x:expr, $y:expr) => {
+        Vec2 { x: $x, y: $y }
+    };
 }
 
 pub trait VectorOperations<T> {
@@ -111,5 +160,20 @@ mod tests {
     #[test]
     fn test_vec_div() {
         assert_eq!(Vec2 { x: 2.0, y: 5.0 } / 2.0, Vec2 { x: 1.0, y: 2.5 });
+    }
+
+    #[test]
+    fn test_vec2_macro_empty() {
+        assert_eq!(vec2![], Vec2 { x: 0, y: 0 });
+    }
+
+    #[test]
+    fn test_vec2_macro_splat() {
+        assert_eq!(vec2![42], Vec2 { x: 42, y: 42 });
+    }
+
+    #[test]
+    fn test_vec2_macro_double_args() {
+        assert_eq!(vec2![3, 4], Vec2 { x: 3, y: 4 });
     }
 }
