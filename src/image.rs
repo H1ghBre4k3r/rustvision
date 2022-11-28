@@ -30,7 +30,7 @@ impl Image {
         let Some(row) = self.pixels.get(y) else {
              return None;
         };
-        return row.get(x).map(|color| *color);
+        return row.get(x).copied();
     }
 
     /// Set the color of a pixel at the specified coordinates.
@@ -77,7 +77,7 @@ impl PNM for Image {
             }
             ppm.push_str(&format!("{}\n", row_str));
         }
-        return ppm;
+        ppm
     }
 }
 
