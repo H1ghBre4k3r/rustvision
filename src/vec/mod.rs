@@ -67,7 +67,7 @@ macro_rules! vec2 {
 
 pub trait VectorOperations<T> {
     /// Get the length of this vector.
-    fn length(&self) -> T;
+    fn length(&self) -> f64;
 
     /// Normalize this vector (i.e., set its length to 1 but preserve the direction).
     fn normalize(&self) -> Self;
