@@ -1,4 +1,4 @@
-use crate::{color::Color, ppm::PNM};
+use crate::{color::Color, ppm::PNM, vec::Vec2d};
 
 /// Struct for representing an image.
 pub struct Image {
@@ -45,6 +45,15 @@ impl Image {
         }
     }
 
+    /// Get the color at a specified pixel.
+    /// The semantics are the same as for Image::get.
+    pub fn at(&self, vector: Vec2d) -> Option<Color> {
+        match (vector.x, vector.y) {
+            (x, y) if x >= 0.0 && y >= 0.0 => self.get(x as usize, y as usize),
+            _ => None,
+        }
+    }
+
     /// Fill the entire image with one color.
     pub fn fill(&mut self, color: &Color) {
         self.pixels = vec![vec![*color; self.cols]; self.rows];
@@ -74,7 +83,7 @@ impl PNM for Image {
 
 #[cfg(test)]
 mod tests {
-    use crate::rgb;
+    use crate::{rgb, vec2};
 
     use super::*;
 
@@ -92,6 +101,22 @@ mod tests {
         img.set(10, 10, &rgb!(42, 42, 17));
         let pixel = img.get(10, 10);
         assert_eq!(pixel, Some(rgb!(42, 42, 17)));
+        let pixel = img.at(vec2![10.0]);
+        assert_eq!(pixel, Some(rgb!(42, 42, 17)));
+    }
+
+    #[test]
+    fn test_image_get_out_of_bounds() {
+        let img = Image::new(42, 17);
+        let pixel = img.get(100, 100);
+        assert_eq!(pixel, None);
+    }
+
+    #[test]
+    fn test_image_at_out_of_bounds() {
+        let img = Image::new(42, 17);
+        let pixel = img.at(vec2![100.0]);
+        assert_eq!(pixel, None);
     }
 
     #[test]

@@ -55,13 +55,13 @@ pub struct Vec2<T> {
 #[macro_export]
 macro_rules! vec2 {
     () => {
-        Vec2::default()
+        $crate::vec::Vec2::default()
     };
     ($val:expr) => {
-        Vec2 { x: $val, y: $val }
+        $crate::vec::Vec2 { x: $val, y: $val }
     };
     ($x:expr, $y:expr) => {
-        Vec2 { x: $x, y: $y }
+        $crate::vec::Vec2 { x: $x, y: $y }
     };
 }
 
