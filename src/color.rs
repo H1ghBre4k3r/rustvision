@@ -1,3 +1,5 @@
+use crate::ppm::PNM;
+
 /// Struct for representing a regular 8bit RGB color.
 #[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
 pub struct Color {
@@ -23,6 +25,12 @@ impl Color {
 impl ToString for Color {
     fn to_string(&self) -> String {
         format!("({},{},{})", self.r, self.g, self.b)
+    }
+}
+
+impl PNM for Color {
+    fn to_pnm_p3(&self) -> String {
+        format!("{} {} {}", self.r, self.g, self.b)
     }
 }
 

@@ -1,4 +1,4 @@
-use crate::color::Color;
+use crate::{color::Color, ppm::PNM};
 
 /// Struct for representing an image.
 pub struct Image {
@@ -11,7 +11,7 @@ impl Image {
     /// Create a new image with the specified width and height, where all pixels are filled with
     /// black.
     pub fn new(cols: usize, rows: usize) -> Self {
-        let pixels = vec![vec![Color::default(); rows]; cols];
+        let pixels = vec![vec![Color::default(); cols]; rows];
         Self { cols, rows, pixels }
     }
 
@@ -27,19 +27,19 @@ impl Image {
 
     /// Get the color at the specified index, or None, if the index it out of bounds.
     pub fn get(&self, x: usize, y: usize) -> Option<Color> {
-        let Some(column) = self.pixels.get(x) else {
+        let Some(row) = self.pixels.get(y) else {
              return None;
         };
-        return column.get(y).map(|color| *color);
+        return row.get(x).map(|color| *color);
     }
 
     /// Set the color of a pixel at the specified coordinates.
     pub fn set(&mut self, x: usize, y: usize, color: &Color) {
-        let Some(column) = self.pixels.get_mut(x) else {
+        let Some(row) = self.pixels.get_mut(y) else {
              return;
         };
-        if y < column.len() {
-            column[y] = *color;
+        if x < row.len() {
+            row[x] = *color;
         } else {
             // TODO: Return error if out of bounds
         }
@@ -47,7 +47,28 @@ impl Image {
 
     /// Fill the entire image with one color.
     pub fn fill(&mut self, color: &Color) {
-        self.pixels = vec![vec![*color; self.rows]; self.cols];
+        self.pixels = vec![vec![*color; self.cols]; self.rows];
+    }
+}
+
+impl PNM for Image {
+    fn to_pnm_p3(&self) -> String {
+        // add magic number
+        let mut ppm = "P3\n".to_string();
+        // add dimensions of the picture
+        ppm.push_str(&format!("{} {}\n", self.cols, self.rows));
+        // add max value
+        ppm.push_str(&format!("{}\n", u8::max_value()));
+
+        // add rows after each other
+        for row in &self.pixels {
+            let mut row_str = "".to_string();
+            for pixel in row {
+                row_str.push_str(&format!("{} ", pixel.to_pnm_p3()));
+            }
+            ppm.push_str(&format!("{}\n", row_str));
+        }
+        return ppm;
     }
 }
 
@@ -62,7 +83,7 @@ mod tests {
         let img = Image::new(42, 17);
         assert_eq!(img.cols(), 42);
         assert_eq!(img.rows(), 17);
-        assert_eq!(img.pixels, vec![vec![Color::splat(0); 17]; 42]);
+        assert_eq!(img.pixels, vec![vec![Color::splat(0); 42]; 17]);
     }
 
     #[test]
@@ -77,6 +98,6 @@ mod tests {
     fn test_image_fill() {
         let mut img = Image::new(42, 17);
         img.fill(&rgb!(17, 120, 42));
-        assert_eq!(img.pixels, vec![vec![rgb!(17, 120, 42); 17]; 42]);
+        assert_eq!(img.pixels, vec![vec![rgb!(17, 120, 42); 42]; 17]);
     }
 }
