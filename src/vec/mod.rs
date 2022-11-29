@@ -1,8 +1,10 @@
 mod vec2d;
+mod vec2i;
 
 use std::ops::{Add, Div, Mul, Sub};
 
 pub use self::vec2d::*;
+pub use self::vec2i::*;
 
 /// Struct for prepresenting a vector in 2D space.
 /// This vector features common operation such as addition, substraction and scaling
@@ -70,7 +72,7 @@ pub trait VectorOperations<T> {
     fn length(&self) -> f64;
 
     /// Normalize this vector (i.e., set its length to 1 but preserve the direction).
-    fn normalize(&self) -> Self;
+    fn normalize(&self) -> Vec2<f64>;
 
     /// Calculate the dot product of this vectort and another one.
     fn dot(&self, rhs: &Self) -> T;
