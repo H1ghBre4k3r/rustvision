@@ -32,6 +32,10 @@ impl PNM for Color {
     fn to_pnm_p3(&self) -> String {
         format!("{} {} {}", self.r, self.g, self.b)
     }
+
+    fn to_pnm_p6(&self) -> Vec<u8> {
+        vec![self.r, self.g, self.b]
+    }
 }
 
 #[macro_export]

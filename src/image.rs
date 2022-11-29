@@ -84,6 +84,24 @@ impl PNM for Image {
         }
         ppm
     }
+
+    fn to_pnm_p6(&self) -> Vec<u8> {
+        // add magic number
+        let mut ppm = "P6\n".to_string();
+        // add dimensions of the picture
+        ppm.push_str(&format!("{} {}\n", self.cols, self.rows));
+        // add max value
+        ppm.push_str(&format!("{}\n", u8::max_value()));
+        let mut ppm = ppm.as_bytes().to_owned();
+        for row in &self.pixels {
+            let mut row_vec = vec![];
+            for pixel in row {
+                row_vec.append(&mut pixel.to_pnm_p6());
+            }
+            ppm.append(&mut row_vec);
+        }
+        ppm
+    }
 }
 
 #[cfg(test)]

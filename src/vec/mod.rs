@@ -67,6 +67,7 @@ macro_rules! vec2 {
     };
 }
 
+/// Common operations on vectors.
 pub trait VectorOperations<T> {
     /// Get the length of this vector.
     fn length(&self) -> f64;
