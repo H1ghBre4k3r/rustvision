@@ -22,8 +22,8 @@ impl Rectangle {
     }
 }
 
-impl Shape for Rectangle {
-    fn draw(&self, img: &mut Image) {
+impl<const COLS: usize, const ROWS: usize> Shape<COLS, ROWS> for Rectangle {
+    fn draw(&self, img: &mut Image<COLS, ROWS>) {
         for x in 0..self.width {
             for y in 0..self.height {
                 // TODO: add proper bounds checks
