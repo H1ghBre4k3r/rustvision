@@ -1,26 +1,28 @@
 use crate::{color::Color, ppm::PNM, shapes::Shape, vec::Vec2d};
 
 /// Struct for representing an image.
-pub struct Image<const COLS: usize, const ROWS: usize> {
-    pixels: [[Color; COLS]; ROWS],
+pub struct Image {
+    cols: usize,
+    rows: usize,
+    pixels: Vec<Vec<Color>>,
 }
 
-impl<const COLS: usize, const ROWS: usize> Image<COLS, ROWS> {
+impl Image {
     /// Create a new image with the specified width and height, where all pixels are filled with
     /// black.
-    pub fn new() -> Self {
-        let pixels = [[Color::default(); COLS]; ROWS];
-        Self { pixels }
+    pub fn new(cols: usize, rows: usize) -> Self {
+        let pixels = vec![vec![Color::default(); cols]; rows];
+        Self { cols, rows, pixels }
     }
 
     /// Get the number of columns of this image.
     pub fn cols(&self) -> usize {
-        COLS
+        self.cols
     }
 
     /// Get the number of rows of this image.
     pub fn rows(&self) -> usize {
-        ROWS
+        self.rows
     }
 
     /// Get the color at the specified index, or None, if the index it out of bounds.
@@ -36,7 +38,7 @@ impl<const COLS: usize, const ROWS: usize> Image<COLS, ROWS> {
         let Some(row) = self.pixels.get_mut(y) else {
              return;
         };
-        if x < COLS {
+        if x < row.len() {
             row[x] = *color;
         } else {
             // TODO: Return error if out of bounds
@@ -54,21 +56,21 @@ impl<const COLS: usize, const ROWS: usize> Image<COLS, ROWS> {
 
     /// Fill the entire image with one color.
     pub fn fill_with(&mut self, color: &Color) {
-        self.pixels = [[*color; COLS]; ROWS];
+        self.pixels = vec![vec![*color; self.cols]; self.rows];
     }
 
     /// Draw a given shape to the picture.
-    pub fn draw(&mut self, shape: &dyn Shape<COLS, ROWS>) {
+    pub fn draw(&mut self, shape: &dyn Shape) {
         shape.draw(self);
     }
 }
 
-impl<const COLS: usize, const ROWS: usize> PNM for Image<COLS, ROWS> {
+impl PNM for Image {
     fn to_pnm_p3(&self) -> String {
         // add magic number
         let mut ppm = "P3\n".to_string();
         // add dimensions of the picture
-        ppm.push_str(&format!("{} {}\n", COLS, ROWS));
+        ppm.push_str(&format!("{} {}\n", self.cols, self.rows));
         // add max value
         ppm.push_str(&format!("{}\n", u8::max_value()));
 
@@ -87,7 +89,7 @@ impl<const COLS: usize, const ROWS: usize> PNM for Image<COLS, ROWS> {
         // add magic number
         let mut ppm = "P6\n".to_string();
         // add dimensions of the picture
-        ppm.push_str(&format!("{} {}\n", COLS, ROWS));
+        ppm.push_str(&format!("{} {}\n", self.cols, self.rows));
         // add max value
         ppm.push_str(&format!("{}\n", u8::max_value()));
         let mut ppm = ppm.as_bytes().to_owned();
@@ -110,15 +112,15 @@ mod tests {
 
     #[test]
     fn test_image_new() {
-        let img = Image::<42, 17>::new();
+        let img = Image::new(42, 17);
         assert_eq!(img.cols(), 42);
         assert_eq!(img.rows(), 17);
-        assert_eq!(img.pixels, [[Color::splat(0); 42]; 17]);
+        assert_eq!(img.pixels, vec![vec![Color::splat(0); 42]; 17]);
     }
 
     #[test]
     fn test_image_set() {
-        let mut img = Image::<42, 17>::new();
+        let mut img = Image::new(42, 17);
         img.set(10, 10, &rgb!(42, 42, 17));
         let pixel = img.get(10, 10);
         assert_eq!(pixel, Some(rgb!(42, 42, 17)));
@@ -128,22 +130,22 @@ mod tests {
 
     #[test]
     fn test_image_get_out_of_bounds() {
-        let img = Image::<42, 17>::new();
+        let img = Image::new(42, 17);
         let pixel = img.get(100, 100);
         assert_eq!(pixel, None);
     }
 
     #[test]
     fn test_image_at_out_of_bounds() {
-        let img = Image::<42, 17>::new();
+        let img = Image::new(42, 17);
         let pixel = img.at(vec2![100.0]);
         assert_eq!(pixel, None);
     }
 
     #[test]
     fn test_image_fill() {
-        let mut img = Image::<42, 17>::new();
+        let mut img = Image::new(42, 17);
         img.fill_with(&rgb!(17, 120, 42));
-        assert_eq!(img.pixels, [[rgb!(17, 120, 42); 42]; 17]);
+        assert_eq!(img.pixels, vec![vec![rgb!(17, 120, 42); 42]; 17]);
     }
 }
