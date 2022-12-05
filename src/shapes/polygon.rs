@@ -16,11 +16,21 @@ impl Polygon {
             ..Default::default()
         }
     }
+
+    /// Set the filled status of this polygon.
+    fn set_filled(&mut self, filled: bool) {
+        self.filled = filled;
+    }
+
+    /// Set the color of this polygon.
+    fn set_color(&mut self, color: Color) {
+        self.color = color;
+    }
 }
 
 #[cfg(test)]
 mod tests {
-    use crate::{color::Color, vec2};
+    use crate::{color::Color, rgb, vec2};
 
     use super::*;
 
@@ -35,5 +45,25 @@ mod tests {
                 color: Color::default()
             }
         )
+    }
+
+    #[test]
+    fn test_set_filled() {
+        let mut polygon = Polygon::default();
+
+        polygon.set_filled(true);
+        assert!(polygon.filled);
+
+        polygon.set_filled(false);
+        assert!(!polygon.filled);
+    }
+
+    #[test]
+    fn test_set_color() {
+        let mut polygon = Polygon::default();
+        let color = rgb!(17, 42, 137);
+
+        polygon.set_color(color);
+        assert_eq!(polygon.color, color);
     }
 }
