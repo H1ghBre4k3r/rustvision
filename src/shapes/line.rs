@@ -77,6 +77,7 @@ impl Shape for Line {
                 }
             }
         }
+        img.set(x as usize, y as usize, &self.color);
     }
 }
 

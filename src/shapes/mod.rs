@@ -5,6 +5,7 @@ mod rect;
 use crate::image::Image;
 
 pub use self::line::*;
+pub use self::polygon::*;
 pub use self::rect::*;
 
 pub trait Shape {

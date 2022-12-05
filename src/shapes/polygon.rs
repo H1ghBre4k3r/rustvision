@@ -1,4 +1,6 @@
-use crate::{color::Color, vec::Vec2d};
+use crate::{color::Color, image::Image, vec::Vec2d};
+
+use super::{Line, Shape};
 
 /// Struct representing a polygon.
 #[derive(Debug, Default, Clone, PartialEq)]
@@ -10,7 +12,7 @@ pub struct Polygon {
 
 impl Polygon {
     /// Create a new polygon with the specified points.
-    fn from_points(points: Vec<Vec2d>) -> Self {
+    pub fn from_points(points: Vec<Vec2d>) -> Self {
         Self {
             points,
             ..Default::default()
@@ -18,13 +20,27 @@ impl Polygon {
     }
 
     /// Set the filled status of this polygon.
-    fn set_filled(&mut self, filled: bool) {
+    pub fn set_filled(&mut self, filled: bool) {
         self.filled = filled;
     }
 
     /// Set the color of this polygon.
-    fn set_color(&mut self, color: Color) {
+    pub fn set_color(&mut self, color: Color) {
         self.color = color;
+    }
+}
+
+impl Shape for Polygon {
+    fn draw(&self, img: &mut Image) {
+        if self.filled {
+            todo!();
+        }
+
+        for (i, point) in self.points.iter().enumerate() {
+            let line =
+                Line::new(*point, self.points[(i + 1) % self.points.len()]).with_color(self.color);
+            img.draw(&line);
+        }
     }
 }
 
