@@ -1,4 +1,5 @@
 mod line;
+mod polygon;
 mod rect;
 
 use crate::image::Image;
