@@ -1,3 +1,5 @@
+//! Vectors in 2D space.
+
 mod vec2d;
 mod vec2i;
 

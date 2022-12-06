@@ -1,3 +1,4 @@
+//! Module for working with RGB colors.
 use crate::ppm::PNM;
 
 /// Struct for representing a regular 8bit RGB color.

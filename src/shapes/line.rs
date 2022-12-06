@@ -1,3 +1,5 @@
+//! Lines in 2D.
+
 use crate::{color::Color, image::Image, vec::Vec2d};
 
 use super::Shape;

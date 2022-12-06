@@ -1,3 +1,4 @@
+//! Module for working with polygons in 2D.
 use crate::{color::Color, image::Image, vec::Vec2d};
 
 use super::{Line, Shape};
@@ -78,7 +79,11 @@ impl Polygon {
         for y in 0..HEIGHT {
             active_edges = active_edges
                 .into_iter()
-                .filter(|edge| edge.y2 as usize <= y)
+                .map(|mut edge| {
+                    edge.x += edge.delta;
+                    edge
+                })
+                .filter(|edge| edge.y2 as usize > y)
                 .collect();
 
             edge_table[y]

@@ -1,3 +1,4 @@
+//! Module for working with images.
 use crate::{color::Color, ppm::PNM, shapes::Shape, vec::Vec2d};
 
 /// Struct for representing an image.

@@ -1,3 +1,5 @@
+//! Utility macros for saving images in PPM format.
+
 /// Trait for transforming any values into their PNM represenataion.
 pub trait PNM {
     /// Convert a value into its P3 represenataion.

@@ -1,3 +1,5 @@
+//! Several shapes and geometric primitives to work with.
+
 mod line;
 mod polygon;
 mod rect;
