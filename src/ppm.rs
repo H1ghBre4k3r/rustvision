@@ -7,7 +7,7 @@ pub trait PNM {
     fn to_pnm_p6(&self) -> Vec<u8>;
 }
 
-/// Macro for saving an image in its PPM represenataion to the disk.
+/// Macro for saving an image in its ASCII PPM represenataion to the disk.
 #[macro_export]
 macro_rules! save_pnm_p3 {
     ($file_name:expr, $img:ident) => {
@@ -18,6 +18,7 @@ macro_rules! save_pnm_p3 {
     };
 }
 
+/// Macr for saving an image in its binary PPM represenataion to the disk.
 #[macro_export]
 macro_rules! save_pnm_p6 {
     ($file_name:expr, $img:ident) => {
