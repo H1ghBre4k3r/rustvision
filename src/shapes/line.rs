@@ -35,11 +35,11 @@ impl Shape for Line {
         let p0 = self.start;
         let p1 = self.end;
 
-        let x0 = p0.x;
-        let y0 = p0.y;
+        let x0 = p0.x as i64;
+        let y0 = p0.y as i64;
 
-        let x1 = p1.x;
-        let y1 = p1.y;
+        let x1 = p1.x as i64;
+        let y1 = p1.y as i64;
 
         let dx = (x1 - x0).abs();
         let dy = (y1 - y0).abs();
@@ -51,31 +51,31 @@ impl Shape for Line {
         let mut y = y0;
 
         if dx >= dy {
-            let mut e = 2.0 * dy - dx;
+            let mut e = 2 * dy - dx;
 
             while x != x1 || y != y1 {
                 img.set(x as usize, y as usize, &self.color);
 
                 x += sx;
-                if e <= 0.0 {
-                    e += 2.0 * dy;
+                if e <= 0 {
+                    e += 2 * dy;
                 } else {
                     y += sy;
-                    e += 2.0 * dy - 2.0 * dx;
+                    e += 2 * dy - 2 * dx;
                 }
             }
         } else {
-            let mut e = 2.0 * dx - dy;
+            let mut e = 2 * dx - dy;
 
             while x != x1 || y != y1 {
                 img.set(x as usize, y as usize, &self.color);
 
                 y += sy;
-                if e <= 0.0 {
-                    e += 2.0 * dx;
+                if e <= 0 {
+                    e += 2 * dx;
                 } else {
                     x += sx;
-                    e += 2.0 * dx - 2.0 * dy;
+                    e += 2 * dx - 2 * dy;
                 }
             }
         }

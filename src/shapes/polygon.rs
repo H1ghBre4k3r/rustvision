@@ -1,5 +1,5 @@
 //! Module for working with polygons in 2D.
-use crate::{color::Color, image::Image, vec::Vec2d};
+use crate::{color::Color, image::Image, rgb, vec::Vec2d};
 
 use super::{Line, Shape};
 
@@ -48,25 +48,34 @@ impl Polygon {
     }
 
     fn fill(&self, img: &mut Image) {
-        let HEIGHT = img.rows();
-        let WIDTH = img.cols();
+        // TODO: Somehow this does not correctly fill the provided
+        // We should investigate this...
 
         let mut edge_table: Vec<Vec<Edge>> = vec![vec![]];
 
-        for i in 0..HEIGHT {
+        // iterate over all "y"s in order to create ET
+        for i in 0..img.rows() {
             let mut edges = vec![];
 
+            // iterator over all vertices
             for (j, current) in self.points.iter().enumerate() {
-                if current.x as usize == i {
+                // ...and check, if they start in this row
+                if current.y as usize == i {
+                    // get previous and next vertex
                     let prev = self.points[if j > 0 { j - 1 } else { self.points.len() - 1 }];
                     let next = self.points[if j < self.points.len() - 1 { j + 1 } else { 0 }];
 
+                    /*
+                     * only add edge if other vertices lie strictly above the current vertex
+                     * this prevents us from adding edges twice (e.g., if y1 == y2)
+                     * and removes the edge case (no pun intended) of delta_y = 0
+                     */
                     if current.y < prev.y {
                         edges.push(Edge::from(&current, &prev));
                     }
 
                     if current.y < next.y {
-                        edges.push(Edge::from(&current, &prev));
+                        edges.push(Edge::from(&current, &next));
                     }
                 }
             }
@@ -76,23 +85,51 @@ impl Polygon {
 
         let mut active_edges: Vec<Edge> = vec![];
 
-        for y in 0..HEIGHT {
+        for y in 0..img.rows() {
+            // adjust x values of
             active_edges = active_edges
                 .into_iter()
                 .map(|mut edge| {
                     edge.x += edge.delta;
                     edge
                 })
-                .filter(|edge| edge.y2 as usize > y)
+                .filter(|edge| edge.y2 >= y as f64)
                 .collect();
 
+            // add starting edges to the AET
             edge_table[y]
                 .iter()
                 .for_each(|elem| active_edges.push(*elem));
 
+            // sort EAT by X
             active_edges.sort_by(|first, second| first.x.partial_cmp(&second.x).unwrap());
-            // TODO: Implement me pls! :<
-            todo!();
+
+            let mut in_shape = false;
+
+            // index for keeping track of current edge
+            let mut index = 0;
+
+            for x in 0..img.cols() {
+                while index < active_edges.len() {
+                    let next_edge = active_edges[index];
+
+                    // if we cross an edge, adjust parity
+                    if x == (if !in_shape {
+                        next_edge.x.ceil() as usize
+                    } else {
+                        next_edge.x.ceil() as usize
+                    }) {
+                        in_shape = !in_shape;
+                    } else {
+                        break;
+                    }
+                    index += 1;
+                }
+
+                if in_shape {
+                    img.set(x, y, &self.color);
+                }
+            }
         }
     }
 }
