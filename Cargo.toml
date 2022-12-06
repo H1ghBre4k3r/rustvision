@@ -5,6 +5,7 @@ edition = "2021"
 repository = "https://github.com/H1ghBre4k3r/rustvision"
 authors = ["H1ghBre4k3r"]
 license = "LGPL-3.0"
+description = "Simple library for interacting with images, vertices, and polygons (and some other stuff related to computer vision)."
 keywords = ["computervision", "graphics"]
 
 [dependencies]

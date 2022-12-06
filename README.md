@@ -1,6 +1,6 @@
 # Rustvision 
 
-Simple (and very early) project for interacting with images, vertices (and some other stuff related to computer vision).
+Simple (and very early) project for interacting with images, vertices, and polygons (and some other stuff related to computer vision).
 
 **Note:** This project is in a very early state and the documentation is far from perfect. Feel free to open PRs with improvements! 
 
