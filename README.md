@@ -25,7 +25,7 @@ fn main() {
 To work with a simple rectangle, you can import and then create one: 
 
 ```rust 
-use rustvision::{image::Image, shapes::Rectangle};
+use rustvision::{image::Image, shapes::Rectangle, rgb, vec2};
 
 // ...
     let rect = Rectangle::new(vec2![50.0, 40.0], 100, 70, rgb!(255, 0, 0));
@@ -47,6 +47,8 @@ If you want to draw this created rectangle to the image, you can do so by callin
 This will draw the rectangle to the provided image. To finally save the image to your disk, you can use another utility macro: 
 
 ```rust
+use rustvision::{image::Image, shapes::Rectangle, rgb, vec2, save_pnm_p6};
+
 // ...
     save_pnm_p6!("path_to_image.ppm", img);
 // ...
@@ -59,6 +61,8 @@ The image will be saved in the P6 (binary PPM) representation. If you prefer the
 Similar to rectangles, you can create more complex polygons:
 
 ```rust 
+use rustvision::{image::Image, shapes::Polygon, vec2};
+
 // ...
     let mut polygon = Polygon::from_points(vec![
         vec2![20.0, 250.0],
@@ -76,6 +80,8 @@ Similar to rectangles, you can create more complex polygons:
 Notice that this "constructor" does not take a color. By default, this polygon will be black. If you want to specify a color, you can do so with the respective method:
 
 ```rust
+use rustvision::{image::Image, shapes::Polygon, rgb, vec2};
+
 // ...
     polygon.set_color(rgb!(0, 255, 0));
 // ...
