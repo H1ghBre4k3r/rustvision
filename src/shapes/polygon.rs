@@ -47,53 +47,41 @@ impl Polygon {
         self.color = color;
     }
 
+    /// Fill this polygon using the scan line algorithm.
     fn fill(&self, img: &mut Image) {
-        // TODO: Somehow this does not correctly fill the provided
-        // We should investigate this...
+        let mut edge_table: Vec<Vec<Edge>> = vec![vec![]; img.rows()];
 
-        let mut edge_table: Vec<Vec<Edge>> = vec![vec![]];
+        // iterator over all vertices
+        for (i, current) in self.points.iter().enumerate() {
+            // get previous and next vertex
+            let prev = self.points[if i > 0 { i - 1 } else { self.points.len() - 1 }];
+            let next = self.points[if i < self.points.len() - 1 { i + 1 } else { 0 }];
 
-        // iterate over all "y"s in order to create ET
-        for i in 0..img.rows() {
-            let mut edges = vec![];
-
-            // iterator over all vertices
-            for (j, current) in self.points.iter().enumerate() {
-                // ...and check, if they start in this row
-                if current.y as usize == i {
-                    // get previous and next vertex
-                    let prev = self.points[if j > 0 { j - 1 } else { self.points.len() - 1 }];
-                    let next = self.points[if j < self.points.len() - 1 { j + 1 } else { 0 }];
-
-                    /*
-                     * only add edge if other vertices lie strictly above the current vertex
-                     * this prevents us from adding edges twice (e.g., if y1 == y2)
-                     * and removes the edge case (no pun intended) of delta_y = 0
-                     */
-                    if current.y < prev.y {
-                        edges.push(Edge::from(&current, &prev));
-                    }
-
-                    if current.y < next.y {
-                        edges.push(Edge::from(&current, &next));
-                    }
-                }
+            /*
+             * only add edge if other vertices lie strictly above the current vertex
+             * this prevents us from adding edges twice (e.g., if y1 == y2)
+             * and removes the edge case (no pun intended) of delta_y = 0
+             */
+            if current.y < prev.y {
+                edge_table[current.y as usize].push(Edge::from(&current, &prev));
             }
 
-            edge_table.push(edges);
+            if current.y < next.y {
+                edge_table[current.y as usize].push(Edge::from(&current, &next));
+            }
         }
 
         let mut active_edges: Vec<Edge> = vec![];
 
         for y in 0..img.rows() {
-            // adjust x values of
+            // adjust x values of all active edges and filter those, that are not important anymore
             active_edges = active_edges
                 .into_iter()
                 .map(|mut edge| {
                     edge.x += edge.delta;
                     edge
                 })
-                .filter(|edge| edge.y2 >= y as f64)
+                .filter(|edge| edge.y2 > y as f64)
                 .collect();
 
             // add starting edges to the AET
