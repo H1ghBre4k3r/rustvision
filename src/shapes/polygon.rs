@@ -102,11 +102,7 @@ impl Polygon {
                     let next_edge = active_edges[index];
 
                     // if we cross an edge, adjust parity
-                    if x == (if !in_shape {
-                        next_edge.x.ceil() as usize
-                    } else {
-                        next_edge.x.ceil() as usize
-                    }) {
+                    if x == next_edge.x.ceil() as usize {
                         in_shape = !in_shape;
                     } else {
                         break;
