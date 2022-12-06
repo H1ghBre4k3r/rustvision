@@ -63,17 +63,17 @@ impl Polygon {
              * and removes the edge case (no pun intended) of delta_y = 0
              */
             if current.y < prev.y {
-                edge_table[current.y as usize].push(Edge::from(&current, &prev));
+                edge_table[current.y as usize].push(Edge::from(current, &prev));
             }
 
             if current.y < next.y {
-                edge_table[current.y as usize].push(Edge::from(&current, &next));
+                edge_table[current.y as usize].push(Edge::from(current, &next));
             }
         }
 
         let mut active_edges: Vec<Edge> = vec![];
 
-        for y in 0..img.rows() {
+        for (y, starting_edges) in edge_table.iter().enumerate().take(img.rows()) {
             // adjust x values of all active edges and filter those, that are not important anymore
             active_edges = active_edges
                 .into_iter()
@@ -85,7 +85,7 @@ impl Polygon {
                 .collect();
 
             // add starting edges to the AET
-            edge_table[y]
+            starting_edges
                 .iter()
                 .for_each(|elem| active_edges.push(*elem));
 
