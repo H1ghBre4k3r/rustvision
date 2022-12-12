@@ -1,6 +1,5 @@
 use rustvision::{
     image::Image,
-    ppm::PNM,
     rgb, save_pnm_p3, save_pnm_p6,
     shapes::{Line, Polygon, Rectangle},
     vec2,

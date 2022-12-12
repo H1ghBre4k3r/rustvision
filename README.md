@@ -102,3 +102,18 @@ Similar to a rectangle, you can draw this polygon to an image:
     img.draw(&polygon);
 // ...
 ```
+
+## Reading Files
+
+You can read files and convert them to the internal image representation by using the `load_image` macro:
+
+```rust 
+use rustvision::{load_image, save_pnm_p3};
+
+fn main() {
+    let image = load_image!("assets/mona_lisa_small.ppm");
+}
+```
+
+**Note:** Currently, this library only support images in PPM6 (i.e., binary PPM) representation. Trying to read any other file will lead to a panic!
+

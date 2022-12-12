@@ -126,8 +126,22 @@
 //! # let mut img = Image::new(400, 400);
 //! img.draw(&polygon);
 //!    ```
+//! ## Reading Files
+//!
+//! You can read files and convert them to the internal image representation by using the `load_image` macro:
+//!
+//! ```rust, no_run
+//! use rustvision::{load_image, save_pnm_p3};
+//!
+//! let image = load_image!("assets/mona_lisa_small.ppm");
+//! ```
+//!
+//! **Note:** Currently, this library only support images in PPM6 (i.e., binary PPM) representation. Trying to read any other file will lead to a panic!
+
 pub mod color;
 pub mod image;
 pub mod ppm;
 pub mod shapes;
 pub mod vec;
+
+mod files;

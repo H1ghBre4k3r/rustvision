@@ -14,12 +14,19 @@ impl Color {
         Self { r, g, b }
     }
 
+    /// Create a color where all values (i.e., r, g & b) have the same value.
     pub fn splat(val: u8) -> Self {
         Self {
             r: val,
             g: val,
             b: val,
         }
+    }
+
+    /// Create a new color from a u8 slice. The slice has to be of length 3.
+    pub fn from_u8_array(vals: &[u8]) -> Self {
+        assert_eq!(vals.len(), 3);
+        Self::new(vals[0], vals[1], vals[2])
     }
 }
 
@@ -121,6 +128,14 @@ mod tests {
                 g: 42,
                 b: 42
             }
+        );
+    }
+
+    #[test]
+    fn test_color_from_u8_array() {
+        assert_eq!(
+            Color::from_u8_array(&[13, 42, 9]),
+            Color { r: 13, g: 42, b: 9 }
         );
     }
 
