@@ -2,7 +2,7 @@
 
 mod representation;
 
-use crate::ppm::parse_ppm6;
+use crate::{files::FileTypes, ppm::parse_ppm6};
 
 pub use self::representation::*;
 
@@ -15,14 +15,13 @@ pub fn parse_image(inp: Vec<u8>) -> Image {
         panic!("No magic constant provided");
     };
 
-    let Ok(magic_constant) = std::str::from_utf8(magic_constant) else {
+    let Ok(magic_constant) = FileTypes::try_from(magic_constant) else {
         panic!("Invalid magic constant provided");
     };
 
-    match magic_constant.trim() {
-        "P3" => panic!("PPM ASCII currently not supported"),
-        "P6" => parse_ppm6(inp),
-        x => panic!("Magic constant '{}' currently not supported", x),
+    match magic_constant {
+        FileTypes::PPM3 => panic!("PPM ASCII currently not supported"),
+        FileTypes::PPM6 => parse_ppm6(inp),
     }
 }
 
