@@ -8,6 +8,8 @@ use std::ops::{Add, Div, Mul, Sub};
 pub use self::vec2d::*;
 pub use self::vec2i::*;
 
+use super::mat::HomogeneousMatrix;
+
 /// Struct for prepresenting a vector in 2D space.
 /// This vector features common operation such as addition, substraction and scaling
 /// (e.g., vector * scalar).
@@ -137,8 +139,19 @@ where
     }
 }
 
+impl<T> From<HomogeneousMatrix<T, 1>> for Vec2<T>
+where
+    T: Copy,
+{
+    fn from(mat: HomogeneousMatrix<T, 1>) -> Self {
+        vec2![mat.matrix[0][0], mat.matrix[1][0]]
+    }
+}
+
 #[cfg(test)]
 mod tests {
+    use crate::mat;
+
     use super::*;
 
     #[test]
@@ -180,5 +193,10 @@ mod tests {
     #[test]
     fn test_vec2_macro_double_args() {
         assert_eq!(vec2![3, 4], Vec2 { x: 3, y: 4 });
+    }
+
+    #[test]
+    fn test_vec2_from_hom_matrix() {
+        assert_eq!(Vec2::from(mat! {[[1], [2], [3]]}), Vec2 { x: 1, y: 2 });
     }
 }

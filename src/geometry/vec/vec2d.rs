@@ -1,3 +1,5 @@
+use crate::{geometry::mat::HomogeneousMatrix, mat};
+
 use super::{Vec2, VectorOperations};
 
 /// Type for representing a 2D vector with f64 as fields.
@@ -15,6 +17,12 @@ impl VectorOperations<f64> for Vec2d {
 
     fn dot(&self, rhs: &Self) -> f64 {
         self.x * rhs.x + self.y * rhs.y
+    }
+}
+
+impl From<Vec2d> for HomogeneousMatrix<f64, 1> {
+    fn from(vector: Vec2d) -> Self {
+        mat! { [[vector.x], [vector.y], [1.0]]}
     }
 }
 
@@ -57,6 +65,14 @@ mod tests {
         assert_eq!(
             Vec2d { x: -4.0, y: -9.0 }.dot(&Vec2d { x: -1.0, y: 2.0 }),
             -14.0
+        );
+    }
+
+    #[test]
+    fn test_hom_matrix_from_vec2d() {
+        assert_eq!(
+            HomogeneousMatrix::from(Vec2d { x: 42.0, y: 17.0 }),
+            HomogeneousMatrix::from([[42.0], [17.0], [1.0]])
         );
     }
 }
