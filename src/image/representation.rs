@@ -1,5 +1,5 @@
 //! Module containing the internal representation of images.
-use crate::{color::Color, ppm::PNM, shapes::Shape, vec::Vec2d};
+use crate::{color::Color, geometry::vec::Vec2d, ppm::PNM, shapes::Shape};
 
 /// Struct for representing an image.
 pub struct Image {

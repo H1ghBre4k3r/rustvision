@@ -1,4 +1,4 @@
-use crate::{color::Color, image::Image, vec::Vec2d};
+use crate::{color::Color, geometry::vec::Vec2d, image::Image};
 
 use super::Shape;
 

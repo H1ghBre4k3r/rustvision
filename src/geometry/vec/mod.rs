@@ -28,7 +28,7 @@ pub struct Vec2<T> {
 ///
 /// ```rust
 /// # #[macro_use] extern crate rustvision;
-/// use rustvision::vec::*;
+/// use rustvision::geometry::vec::*;
 ///
 /// let v = vec2![];
 /// assert_eq!(v, Vec2 { x: 0, y: 0 });
@@ -38,7 +38,7 @@ pub struct Vec2<T> {
 ///
 /// ```rust
 /// # #[macro_use] extern crate rustvision;
-/// use rustvision::vec::*;
+/// use rustvision::geometry::vec::*;
 ///
 /// let v = vec2![42];
 /// assert_eq!(v, Vec2 { x: 42, y: 42 });
@@ -48,7 +48,7 @@ pub struct Vec2<T> {
 ///
 /// ```rust
 /// # #[macro_use] extern crate rustvision;
-/// use rustvision::vec::*;
+/// use rustvision::geometry::vec::*;
 ///
 /// let v = vec2![42, 1337];
 /// assert_eq!(v, Vec2 { x: 42, y: 1337 });
@@ -59,13 +59,13 @@ pub struct Vec2<T> {
 #[macro_export]
 macro_rules! vec2 {
     () => {
-        $crate::vec::Vec2::default()
+        $crate::geometry::vec::Vec2::default()
     };
     ($val:expr) => {
-        $crate::vec::Vec2 { x: $val, y: $val }
+        $crate::geometry::vec::Vec2 { x: $val, y: $val }
     };
     ($x:expr, $y:expr) => {
-        $crate::vec::Vec2 { x: $x, y: $y }
+        $crate::geometry::vec::Vec2 { x: $x, y: $y }
     };
 }
 

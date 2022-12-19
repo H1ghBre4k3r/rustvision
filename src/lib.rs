@@ -139,9 +139,9 @@
 //! **Note:** Currently, this library only support images in PPM6 (i.e., binary PPM) representation. Trying to read any other file will lead to a panic!
 
 pub mod color;
+pub mod geometry;
 pub mod image;
 pub mod ppm;
 pub mod shapes;
-pub mod vec;
 
 mod files;
