@@ -77,7 +77,7 @@ pub trait VectorOperations<T> {
     /// Normalize this vector (i.e., set its length to 1 but preserve the direction).
     fn normalize(&self) -> Vec2<f64>;
 
-    /// Calculate the dot product of this vectort and another one.
+    /// Calculate the dot product of this vector and another one.
     fn dot(&self, rhs: &Self) -> T;
 }
 
