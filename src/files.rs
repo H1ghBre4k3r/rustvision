@@ -17,6 +17,7 @@ macro_rules! write_file {
 }
 
 /// Enum representing all supported files types of this library.
+#[derive(Debug, Copy, Clone, PartialEq, Eq)]
 pub enum FileTypes {
     PPM3,
     PPM6,
@@ -40,5 +41,28 @@ impl TryFrom<&[u8]> for FileTypes {
                 x
             ))),
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::FileTypes;
+
+    #[test]
+    fn test_ppm3() {
+        assert!(FileTypes::try_from("P3".as_bytes()).is_ok());
+        assert_eq!(
+            FileTypes::try_from("P3".as_bytes()).unwrap(),
+            FileTypes::PPM3
+        );
+    }
+
+    #[test]
+    fn test_ppm6() {
+        assert!(FileTypes::try_from("P6".as_bytes()).is_ok());
+        assert_eq!(
+            FileTypes::try_from("P6".as_bytes()).unwrap(),
+            FileTypes::PPM6
+        );
     }
 }
