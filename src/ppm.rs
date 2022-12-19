@@ -31,11 +31,11 @@ macro_rules! save_pnm_p6 {
 /// valid.
 pub fn parse_ppm6(inp: Vec<u8>) -> Image {
     let mut iter = inp.iter();
-    let Some(first_line_break) = iter.position(|&item| item == '\n' as u8) else {
+    let Some(first_line_break) = iter.position(|&item| item == b'\n') else {
         panic!("No valid magic constant");
     };
 
-    let Some(second_line_break) = iter.position(|&item| item == '\n' as u8) else {
+    let Some(second_line_break) = iter.position(|&item| item == b'\n') else {
         panic!("No dimensions provided");
     };
 
@@ -47,7 +47,7 @@ pub fn parse_ppm6(inp: Vec<u8>) -> Image {
         panic!("Dimensions need to be UTF8");
     };
 
-    let Some((left, right)) = dimensions.trim().split_once(" ") else {
+    let Some((left, right)) = dimensions.trim().split_once(' ') else {
         panic!("Dimensions to not have valid format!");
     };
 
@@ -59,7 +59,7 @@ pub fn parse_ppm6(inp: Vec<u8>) -> Image {
         panic!("Height does not have valid format! ({})", right);
     };
 
-    let Some(third_line_break) = iter.position(|&item| item == '\n' as u8) else {
+    let Some(third_line_break) = iter.position(|&item| item == b'\n') else {
         panic!("No max value provided");
     };
 

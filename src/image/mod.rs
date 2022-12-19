@@ -1,15 +1,15 @@
 //! Module for working with images.
 
-mod image;
+mod representation;
 
 use crate::ppm::parse_ppm6;
 
-pub use self::image::*;
+pub use self::representation::*;
 
 /// Try to parse a given image from a vector of u8. The format will be determined from the magic
 /// constant at the head of the file.
 pub fn parse_image(inp: Vec<u8>) -> Image {
-    let mut lines = inp.split(|val| *val == '\n' as u8);
+    let mut lines = inp.split(|val| *val == b'\n');
 
     let Some(magic_constant) = lines.next() else {
         panic!("No magic constant provided");
